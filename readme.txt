@@ -4,21 +4,36 @@ The files in this repo are part of an effort to use h2o to predict s&p500.
 
 Installation:
 
+- Install Linux Ubuntu 14 on your laptop or desktop.
+  This demo cannot run in the cloud.
+
+- Login as root
+
+- apt-get install gitk wget
+
+- useradd -m -s /bin/bash ann
+
+- passwd ann
+
+- ssh ann@yourhost
+
+- git clone https://github.com/danbikle/aispy.git
+
 H2O fails to work with many versions of Java.
-Today, H2O depends on Oracle-Java-JDK-7:
+Today, the H2O behind this demo, depends on Oracle-Java-JDK-7.
+
 - Download and install Java from Oracle.com:
+
 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 
 Look for a link named JDK-7
-The link I see today (2015-04-06):
-http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.tar.gz
-
 
 Click the accept-license-radio-button on the web page,
 then a link like this should appear:
 
+http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.tar.gz
 
-- cd ~ann/
+- Download it
 
 - tar zxf ~/Downloads/jdk-7u75-linux-x64.tar.gz
 
