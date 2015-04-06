@@ -33,3 +33,27 @@ http://download.oracle.com/otn-pub/java/jdk/8u40-b26/jdk-8u40-linux-x64.tar.gz
 
 - javac -version
 
+- I should install IntelliJ. Browse this URL:
+
+- https://www.jetbrains.com/idea/download/
+
+- Download Community Edition
+
+- tar zxf ~/Downloads/ideaIC-14.1.1.tar.gz
+
+- ln -s idea-IC-141.178.9 idea
+
+- echo 'export PATH=~ann/idea/bin:$PATH' >> ~ann/.bashrc
+
+- ~ann/idea/bin/idea.sh
+
+- During idea startup, install scala plugin
+
+- I shold click the open icon if it is presented
+
+- Navigate to this readme.txt and open it
+
+
+
+
+
