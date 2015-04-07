@@ -1,13 +1,14 @@
 
 package water.droplets
 
-import java.io.File
+import java.io._
 
 import hex.tree.gbm.GBM
 import hex.tree.gbm.GBMModel.GBMParameters
 import org.apache.spark.h2o.{StringHolder, H2OContext}
 import org.apache.spark.{SparkFiles, SparkContext, SparkConf}
-import water.fvec.DataFrame
+import water.fvec._
+import water.api._
 
 object AiSpy {
 
@@ -39,8 +40,17 @@ object AiSpy {
     val gbm                    = new GBM(gbmParams)
     val gbmModel               = gbm.trainModel.get
 
+    val csv_writer = new PrintWriter(new File("/tmp/mypredictions.csv"))
     // Make prediction on train data
-    val predict = gbmModel.score(oos2_df)('predict)
+    val predictions_df = gbmModel.score(oos2_df)('predict)
+    val numRows        = predictions_df.numRows().toInt
+    (0 to numRows-1).foreach(rnum => {
+      var utime_i      = oos_df('cdate).vec(0).at(rnum)
+      var prediction_f = predictions_df.vec(0).at(rnum)
+      var csv_s        = utime_i+","+prediction_f+"\n"
+      csv_writer.write(csv_s)
+      print(csv_s)})
+    csv_writer.close
 
     // Shutdown application
     sc.stop()
