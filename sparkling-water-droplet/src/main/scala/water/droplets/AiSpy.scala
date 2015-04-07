@@ -27,7 +27,17 @@ object AiSpy {
 
     // Load data and parse it via h2o parser
     val train_df = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_train.csv")))
-    val oos_df   = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
+    val oos_df    = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
+    val train2_df = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+    val oos2_df   =   oos_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+
+    // Build GBM model
+    val gbmParams              = new GBMParameters()
+    gbmParams._train           = train2_df
+    gbmParams._response_column = 'pctlead
+    gbmParams._ntrees          = 5
+    val gbm                    = new GBM(gbmParams)
+    val gbmModel               = gbm.trainModel.get
 
     // Shutdown application
     sc.stop()
