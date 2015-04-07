@@ -39,6 +39,9 @@ object AiSpy {
     val gbm                    = new GBM(gbmParams)
     val gbmModel               = gbm.trainModel.get
 
+    // Make prediction on train data
+    val predict = gbmModel.score(oos2_df)('predict)
+
     // Shutdown application
     sc.stop()
   }
