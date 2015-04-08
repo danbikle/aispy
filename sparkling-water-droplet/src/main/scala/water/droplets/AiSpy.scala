@@ -15,6 +15,7 @@ import org.apache.spark.{SparkFiles, SparkContext, SparkConf}
 import water.fvec._
 import water.api._
 import org.joda.time.MutableDateTime
+import sys.process._
 
 object AiSpy {
 
@@ -69,7 +70,7 @@ object AiSpy {
       var dl_prediction_f  = dl_predictions_df.vec( 0).at(rnum)
       var utime_l          = oos_df('cdate).vec(    0).at(rnum).toLong
       mdt.setMillis(utime_l)
-      # Date formating should be refactored from 4 lines to 1 line
+      // Date formating should be refactored from 4 lines to 1 line
       var yr               = mdt.getYear.toString
       var moy              = f"${mdt.getMonthOfYear}%02d"
       var dom              = f"${mdt.getDayOfMonth}%02d"
@@ -83,6 +84,9 @@ object AiSpy {
       println("oos row processed: "+rnum)})
     gbm_csv_writer.close
     dl_csv_writer.close
+
+    // I should manually garbage collect
+    "/home/ann/aispy/curl_remove_all.bash" ! scala.sys.process.ProcessLogger(ln => println(ln))
 
     // Shutdown application
     sc.stop()
