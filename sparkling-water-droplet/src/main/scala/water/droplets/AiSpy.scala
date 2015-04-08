@@ -27,7 +27,7 @@ object AiSpy {
     sc.addFile("data/ftr_ff_GSPC_oos.csv"  )
 
     // Load data and parse it via h2o parser
-    val train_df = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_train.csv")))
+    val train_df  = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_train.csv")))
     val oos_df    = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
     val train2_df = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
     val oos2_df   =   oos_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
@@ -46,8 +46,10 @@ object AiSpy {
     val numRows        = predictions_df.numRows().toInt
     (0 to numRows-1).foreach(rnum => {
       var utime_i      = oos_df('cdate).vec(0).at(rnum)
+      var cp_f         = oos_df('cp).vec(0).at(rnum)
       var prediction_f = predictions_df.vec(0).at(rnum)
-      var csv_s        = utime_i+","+prediction_f+"\n"
+      var actual_f     = oos_df('pctlead).vec(0).at(rnum)
+      var csv_s        = utime_i+","+cp_f+","+prediction_f+","+actual_f+"\n"
       csv_writer.write(csv_s)
       print(csv_s)})
     csv_writer.close
