@@ -72,6 +72,7 @@ object AiSpy {
       gbm_csv_writer.write(gbm_csv_s)
       dl_csv_writer.write(  dl_csv_s)
       println("oos row processed: "+rnum)})
+    gbm_csv_writer.close
     dl_csv_writer.close
 
     // Shutdown application
