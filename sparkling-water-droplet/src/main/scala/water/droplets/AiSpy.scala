@@ -55,19 +55,24 @@ object AiSpy {
     val dl                    = new DeepLearning(dlParams)
     val dlModel               = dl.trainModel.get
 
-    val csv_writer = new PrintWriter(new File("/tmp/dl_predictions.csv"))
-    // Make prediction on train data
-    val predictions_df = dlModel.score(oos2_df)('predict)
-    val numRows        = predictions_df.numRows().toInt
+    val gbm_csv_writer = new PrintWriter(new File("/tmp/gbm_predictions.csv"))
+    val dl_csv_writer  = new PrintWriter(new File("/tmp/dl_predictions.csv" ))
+    // Calculate predictions
+    val gbm_predictions_df = gbmModel.score(oos2_df)('predict)
+    val dl_predictions_df  = dlModel.score( oos2_df)('predict)
+    val numRows            = dl_predictions_df.numRows().toInt
     (0 to numRows-1).foreach(rnum => {
-      var utime_i      = oos_df('cdate).vec(0).at(rnum)
-      var cp_f         = oos_df('cp).vec(0).at(rnum)
-      var prediction_f = predictions_df.vec(0).at(rnum)
-      var actual_f     = oos_df('pctlead).vec(0).at(rnum)
-      var csv_s        = utime_i+","+cp_f+","+prediction_f+","+actual_f+"\n"
-      csv_writer.write(csv_s)
-      print(csv_s)})
-    csv_writer.close
+      var gbm_prediction_f = gbm_predictions_df.vec(0).at(rnum)
+      var dl_prediction_f  = dl_predictions_df.vec( 0).at(rnum)
+      var utime_i          = oos_df('cdate).vec(  0).at(rnum)
+      var cp_f             = oos_df('cp).vec(     0).at(rnum)
+      var actual_f         = oos_df('pctlead).vec(0).at(rnum)
+      var gbm_csv_s = utime_i+","+cp_f+","+gbm_prediction_f+","+actual_f+"\n"
+      var dl_csv_s  = utime_i+","+cp_f+","+dl_prediction_f+ ","+actual_f+"\n"
+      gbm_csv_writer.write(gbm_csv_s)
+      dl_csv_writer.write(  dl_csv_s)
+      println("oos row processed: "+rnum)})
+    dl_csv_writer.close
 
     // Shutdown application
     sc.stop()
