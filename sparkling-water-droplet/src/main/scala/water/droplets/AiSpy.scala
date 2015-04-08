@@ -5,6 +5,11 @@ import java.io._
 
 import hex.tree.gbm.GBM
 import hex.tree.gbm.GBMModel.GBMParameters
+
+import hex.deeplearning.DeepLearning
+import hex.deeplearning.DeepLearningModel.DeepLearningParameters
+import hex.deeplearning.DeepLearningModel.DeepLearningParameters.Activation
+
 import org.apache.spark.h2o.{StringHolder, H2OContext}
 import org.apache.spark.{SparkFiles, SparkContext, SparkConf}
 import water.fvec._
@@ -40,9 +45,19 @@ object AiSpy {
     val gbm                    = new GBM(gbmParams)
     val gbmModel               = gbm.trainModel.get
 
-    val csv_writer = new PrintWriter(new File("/tmp/mypredictions.csv"))
+    // Build DeepLearning model
+    val dlParams              = new DeepLearningParameters()
+    dlParams._train           = train2_df
+    dlParams._response_column = 'pctlead
+    dlParams._epochs          = 20
+    dlParams._activation      = Activation.RectifierWithDropout
+    dlParams._hidden          = Array[Int](7,14)
+    val dl                    = new DeepLearning(dlParams)
+    val dlModel               = dl.trainModel.get
+
+    val csv_writer = new PrintWriter(new File("/tmp/dl_predictions.csv"))
     // Make prediction on train data
-    val predictions_df = gbmModel.score(oos2_df)('predict)
+    val predictions_df = dlModel.score(oos2_df)('predict)
     val numRows        = predictions_df.numRows().toInt
     (0 to numRows-1).foreach(rnum => {
       var utime_i      = oos_df('cdate).vec(0).at(rnum)
