@@ -14,6 +14,7 @@ import org.apache.spark.h2o.{StringHolder, H2OContext}
 import org.apache.spark.{SparkFiles, SparkContext, SparkConf}
 import water.fvec._
 import water.api._
+import org.joda.time.MutableDateTime
 
 object AiSpy {
 
@@ -55,8 +56,10 @@ object AiSpy {
     val dl                    = new DeepLearning(dlParams)
     val dlModel               = dl.trainModel.get
 
+    val mdt = new MutableDateTime()
     val gbm_csv_writer = new PrintWriter(new File("/tmp/gbm_predictions.csv"))
     val dl_csv_writer  = new PrintWriter(new File("/tmp/dl_predictions.csv" ))
+
     // Calculate predictions
     val gbm_predictions_df = gbmModel.score(oos2_df)('predict)
     val dl_predictions_df  = dlModel.score( oos2_df)('predict)
@@ -64,11 +67,17 @@ object AiSpy {
     (0 to numRows-1).foreach(rnum => {
       var gbm_prediction_f = gbm_predictions_df.vec(0).at(rnum)
       var dl_prediction_f  = dl_predictions_df.vec( 0).at(rnum)
-      var utime_i          = oos_df('cdate).vec(  0).at(rnum)
+      var utime_l          = oos_df('cdate).vec(    0).at(rnum).toLong
+      mdt.setMillis(utime_l)
+      # Date formating should be refactored from 4 lines to 1 line
+      var yr               = mdt.getYear.toString
+      var moy              = f"${mdt.getMonthOfYear}%02d"
+      var dom              = f"${mdt.getDayOfMonth}%02d"
+      var date_s           = yr+"-"+moy+"-"+dom
       var cp_f             = oos_df('cp).vec(     0).at(rnum)
       var actual_f         = oos_df('pctlead).vec(0).at(rnum)
-      var gbm_csv_s = utime_i+","+cp_f+","+gbm_prediction_f+","+actual_f+"\n"
-      var dl_csv_s  = utime_i+","+cp_f+","+dl_prediction_f+ ","+actual_f+"\n"
+      var gbm_csv_s = date_s+","+cp_f+","+gbm_prediction_f+","+actual_f+"\n"
+      var dl_csv_s  = date_s+","+cp_f+","+dl_prediction_f+ ","+actual_f+"\n"
       gbm_csv_writer.write(gbm_csv_s)
       dl_csv_writer.write(  dl_csv_s)
       println("oos row processed: "+rnum)})
