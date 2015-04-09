@@ -34,7 +34,7 @@ object AiSpy {
     import h2oContext._
 
     // I should get all observations out of CSV
-    val all_obs_s  = "/home/ann/aispy/sparkling-water-droplet/data/ftr_ff_GSPC.csv"
+    val all_obs_s  = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
     val all_obs_df = new DataFrame(new File(all_obs_s))
     var predictions_array = new Array[String](pcount)
 
@@ -49,8 +49,9 @@ object AiSpy {
       var moy     = f"${mdt.getMonthOfYear}%02d"
       var dom     = f"${mdt.getDayOfMonth}%02d"
       var date_s  = yr+"-"+moy+"-"+dom
-      var cp      = oos_df('cp).vec(0).at(rnum)
-      predictions_array(rnum) = date_s
+      var cp_s    = all_obs_df('cp).vec(0).at(rnum)
+      var pctlead_s = all_obs_df('pctlead).vec(0).at(rnum)
+      predictions_array(rnum) = date_s+","+cp_s+","+pctlead_s+","
       "endloop"
 })
 
