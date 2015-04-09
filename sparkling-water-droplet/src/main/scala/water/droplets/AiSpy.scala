@@ -21,6 +21,10 @@ object AiSpy {
 
   def main(args: Array[String]) {
 
+    // I should calculate this many predictions:
+    val pcount = 9
+    val mdt = new MutableDateTime()
+
     // Create Spark Context
     val conf = configure("Sparkling Water Droplet")
     val sc = new SparkContext(conf)
@@ -29,15 +33,36 @@ object AiSpy {
     val h2oContext = new H2OContext(sc).start()
     import h2oContext._
 
+    // I should get all observations out of CSV
+    val all_obs_s  = "/home/ann/aispy/sparkling-water-droplet/data/ftr_ff_GSPC.csv"
+    val all_obs_df = new DataFrame(new File(all_obs_s))
+    var predictions_array = new Array[String](pcount)
+
+    (0 to pcount-1).foreach(rnum => {
+      println("rnum is: "+rnum)
+      // I should get row from all_obs_df
+      var oos_df  = all_obs_df('cdate)
+      var utime_l = oos_df('cdate).vec(0).at(rnum).toLong
+      mdt.setMillis(utime_l)
+      // Date formating should be refactored from 4 lines to 1 line
+      var yr      = mdt.getYear.toString
+      var moy     = f"${mdt.getMonthOfYear}%02d"
+      var dom     = f"${mdt.getDayOfMonth}%02d"
+      var date_s  = yr+"-"+moy+"-"+dom
+      var cp      = oos_df('cp).vec(0).at(rnum)
+      predictions_array(rnum) = date_s
+      "endloop"
+})
+
     // Register file to be available on all nodes
     sc.addFile("data/ftr_ff_GSPC_train.csv")
     sc.addFile("data/ftr_ff_GSPC_oos.csv"  )
 
     // Load data and parse it via h2o parser
     val train_df  = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_train.csv")))
-    val oos_df    = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
+    val oos1_df   = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
     val train2_df = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
-    val oos2_df   =   oos_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+    val oos2_df   =   oos1_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
 
     // Build GBM model
     val gbmParams              = new GBMParameters()
@@ -57,7 +82,7 @@ object AiSpy {
     val dl                    = new DeepLearning(dlParams)
     val dlModel               = dl.trainModel.get
 
-    val mdt = new MutableDateTime()
+
     val gbm_csv_writer = new PrintWriter(new File("/tmp/gbm_predictions.csv"))
     val dl_csv_writer  = new PrintWriter(new File("/tmp/dl_predictions.csv" ))
 
@@ -68,15 +93,15 @@ object AiSpy {
     (0 to numRows-1).foreach(rnum => {
       var gbm_prediction_f = gbm_predictions_df.vec(0).at(rnum)
       var dl_prediction_f  = dl_predictions_df.vec( 0).at(rnum)
-      var utime_l          = oos_df('cdate).vec(    0).at(rnum).toLong
+      var utime_l          = oos1_df('cdate).vec(   0).at(rnum).toLong
       mdt.setMillis(utime_l)
       // Date formating should be refactored from 4 lines to 1 line
       var yr               = mdt.getYear.toString
       var moy              = f"${mdt.getMonthOfYear}%02d"
       var dom              = f"${mdt.getDayOfMonth}%02d"
       var date_s           = yr+"-"+moy+"-"+dom
-      var cp_f             = oos_df('cp).vec(     0).at(rnum)
-      var actual_f         = oos_df('pctlead).vec(0).at(rnum)
+      var cp_f             = oos1_df('cp).vec(     0).at(rnum)
+      var actual_f         = oos1_df('pctlead).vec(0).at(rnum)
       var gbm_csv_s = date_s+","+cp_f+","+gbm_prediction_f+","+actual_f+"\n"
       var dl_csv_s  = date_s+","+cp_f+","+dl_prediction_f+ ","+actual_f+"\n"
       gbm_csv_writer.write(gbm_csv_s)
