@@ -17,7 +17,7 @@ import java.io._
 import org.apache.spark.h2o._
 import org.apache.spark._
 import water.fvec._
-object SparklingWaterDroplet {
+object Df2csv {
 
   def main(args: Array[String]) {
 

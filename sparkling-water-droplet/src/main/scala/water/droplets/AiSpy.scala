@@ -16,6 +16,7 @@ import water.fvec._
 import water.api._
 import org.joda.time.MutableDateTime
 import sys.process._
+import scala.io.Source
 
 object AiSpy {
 
@@ -35,8 +36,24 @@ object AiSpy {
 
     // I should get all observations out of CSV
     val all_obs_s  = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
+    val all_obs_f = scala.io.Source.fromFile(all_obs_s)
+    val all_obs_a = all_obs_f.getLines()
+
+    val my_csv_writer = new PrintWriter(new File("/tmp/my_obs.csv"))
+    var obc = 0
+    all_obs_a.foreach(elm => {
+      if (obc == 1) println(elm)
+      my_csv_writer.write(elm+"\n")
+      obc +=1})
+    my_csv_writer.close
+
+
     val all_obs_df = new DataFrame(new File(all_obs_s))
     var predictions_array = new Array[String](pcount)
+
+    // I should demo how to slice some columns and rows
+    var mycolnum = all_obs_df.numCols()
+    var hello    = all_obs_df.vec(0)
 
     (0 to pcount-1).foreach(rnum => {
       println("rnum is: "+rnum)
