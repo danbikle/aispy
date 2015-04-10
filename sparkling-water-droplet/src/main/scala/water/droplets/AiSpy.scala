@@ -45,7 +45,8 @@ object AiSpy {
 
     // I should build a prediction loop from pcount.
     // I should have this number of days between training data and oos data:
-    val train_oos_gap = 2
+    val train_oos_gap     = 2
+    var predictions_array = new Array[String](pcount)
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
       var train_end   = train_start+train_count
@@ -86,12 +87,14 @@ object AiSpy {
       var dom     = f"${mdt.getDayOfMonth}%02d"
       var date_s  = yr+"-"+moy+"-"+dom
       var cp_s    = oos_df('cp).vec(0).at(0)
+      var pctlead_s              = oos_df('pctlead).vec(0).at(0)
+      predictions_array(oos_i-1) = date_s+","+cp_s+","+dl_prediction_f+","+pctlead_s
       println(oos_i)
 })
 
 /**
     val all_obs_df = new DataFrame(new File(all_obs_s))
-    var predictions_array = new Array[String](pcount)
+    
 
     // I should demo how to slice some columns and rows
     var mycolnum = all_obs_df.numCols()
