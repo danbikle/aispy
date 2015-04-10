@@ -42,16 +42,6 @@ object AiSpy {
     val all_obs_f  = scala.io.Source.fromFile(all_obs_s)
     val all_obs    = all_obs_f.getLines
     val all_obs_a  = all_obs.toArray
-    // I should declare integers for navigating my arrays:
-    // cdate,cp,pctlead,pctlag1,pctlag2,pctlag4,pctlag8,ip,presult,p2
-    val cdate_i   = 0
-    val cp_i      = 1
-    val pctlead_i = 2
-    val pctlag1_i = 3
-    val p2_i      = 9
-    val x_s_a     = all_obs_a.map(_.split(",").slice(pctlag1_i,p2_i+1))
-    // I should drop header row then convert toFloat:
-    val x_a       = x_s_a.drop(1).map(_.map(_.toString.toFloat))
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
