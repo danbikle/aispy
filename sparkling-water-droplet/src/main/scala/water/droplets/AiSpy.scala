@@ -56,6 +56,7 @@ object AiSpy {
       oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
       // I should write train-data to CSV:
+      var trainf_s         = "/tmp/train.csv"
       var train_csv_writer = new PrintWriter(new File(trainf_s))
       train_csv_writer.write(all_obs_a(0)    +"\n")
       var train_a = all_obs_a.slice(train_start,train_end)
