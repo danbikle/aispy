@@ -79,6 +79,13 @@ object AiSpy {
       // I should prepare for reporting
       var dl_prediction_f  = dl_prediction_df.vec(0).at(0)
       var utime_l          = oos_df('cdate).vec(  0).at(0).toLong
+      mdt.setMillis(utime_l)
+      // Date formating should be refactored from 4 lines to 1 line
+      var yr      = mdt.getYear.toString
+      var moy     = f"${mdt.getMonthOfYear}%02d"
+      var dom     = f"${mdt.getDayOfMonth}%02d"
+      var date_s  = yr+"-"+moy+"-"+dom
+
       println(oos_i)
 })
 
