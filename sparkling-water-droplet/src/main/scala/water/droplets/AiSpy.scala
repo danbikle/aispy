@@ -62,22 +62,23 @@ object AiSpy {
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
       var train_end   = train_start+train_count
-      var x_train = x_a.slice(train_start,train_end)
       // I should write oos-data to CSV:
       var oosf_s         = "/tmp/oos.csv"
       var oos_csv_writer = new PrintWriter(new File(oosf_s))
       oos_csv_writer.write(all_obs_a(0)    +"\n")
       oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
-      // I should build a df from csv
-      var oos_df = new DataFrame(new File(oosf_s))
       // I should write train-data to CSV:
-      var trainf_s       = "/tmp/train.csv"
+      var trainf_s         = "/tmp/train.csv"
       var train_csv_writer = new PrintWriter(new File(trainf_s))
       train_csv_writer.write(all_obs_a(0)    +"\n")
       var train_a = all_obs_a.slice(train_start,train_end)
       train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
       train_csv_writer.close
+      // I should build DataFrames from CSV files:
+      var oos_df   = new DataFrame(new File(oosf_s  ))
+      var train_df = new DataFrame(new File(trainf_s))
+
       println(oos_i)})
 
 
