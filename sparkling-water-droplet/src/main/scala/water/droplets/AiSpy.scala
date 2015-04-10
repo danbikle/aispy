@@ -51,21 +51,21 @@ object AiSpy {
     // I should get DeepLearning ready:
     var dlParams      = new DeepLearningParameters()
     var dl            = new DeepLearning(dlParams)
-
-        var trainf_s         = "/tmp/train.csv"
-        var train_csv_writer = new PrintWriter(new File(trainf_s))
-        train_csv_writer.write(all_obs_a(0)    +"\n")
-        var train_a = all_obs_a.slice(1,100)
-        train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
-        train_csv_writer.close
-        var train_df = new DataFrame(new File(trainf_s))
-        dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
-        dlParams._response_column = 'pctlead
-        dlParams._epochs          = 2
-        dlParams._activation      = Activation.RectifierWithDropout
-        dlParams._hidden          = Array[Int](7,14)
-        dl                        = new DeepLearning(dlParams)
-
+    // I should jump through hoops to initialize dlModel:
+    var trainf_s         = "/tmp/train.csv"
+    var train_csv_writer = new PrintWriter(new File(trainf_s))
+    train_csv_writer.write(all_obs_a(0)+"\n")
+    var train_a = all_obs_a.slice(1,100)
+    train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
+    train_csv_writer.close
+    var train_df = new DataFrame(new File(trainf_s))
+    dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+    dlParams._response_column = 'pctlead
+    dlParams._epochs          = 2
+    dlParams._activation      = Activation.RectifierWithDropout
+    dlParams._hidden          = Array[Int](7,14)
+    dl                        = new DeepLearning(dlParams)
+    // Now I can intialize dlModel:
     var dlModel       = dl.trainModel.get
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
@@ -77,8 +77,8 @@ object AiSpy {
       oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
       // I should write train-data to CSV:
-      // var trainf_s         = "/tmp/train.csv"
       // var train_csv_writer = new PrintWriter(new File(trainf_s))
+train_csv_writer = new PrintWriter(new File(trainf_s))
       // train_csv_writer.write(all_obs_a(0)    +"\n")
       // var train_a = all_obs_a.slice(train_start,train_end)
       // train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
