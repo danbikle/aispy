@@ -39,9 +39,9 @@ object AiSpy {
 
     // I should get all observations out of CSV
     val all_obs_s  = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
-    val all_obs_f = scala.io.Source.fromFile(all_obs_s)
-    val all_obs   = all_obs_f.getLines
-    val all_obs_a = all_obs.toArray
+    val all_obs_f  = scala.io.Source.fromFile(all_obs_s)
+    val all_obs    = all_obs_f.getLines
+    val all_obs_a  = all_obs.toArray
     val all_obs2_a = all_obs_a.slice(1,4)
     // I should declare integers for navigating my arrays:
     // cdate,cp,pctlead,pctlag1,pctlag2,pctlag4,pctlag8,ip,presult,p2
@@ -51,18 +51,25 @@ object AiSpy {
     val pctlag1_i = 3
     val p2_i      = 9
     val x_s_a     = all_obs_a.map(_.split(",").slice(pctlag1_i,p2_i+1))
-    val x_a       = x_s_a.map(_.toInt)
+    // I should drop header row then convert toFloat:
+    val x_a       = x_s_a.drop(1).map(_.map(_.toString.toFloat))
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
     val dofit = 10
     // I should have this number of days between training data and oos data:
-    val train_oos_gap = dofit // train_oos_gap should <= dofit
+    val train_oos_gap = dofit + 1// train_oos_gap should <= dofit
 
-    (1 to pcount).foreach(oos_i =>{
-      var x_oos = x_a(oos_i)
-      println(oos_i)
-"endloop"})
+    (0 to pcount-1).foreach(oos_i =>{
+      var x_oos       = x_a(oos_i)
+      var train_start = oos_i+train_oos_gap
+      var train_end   = train_start+train_count
+      var x_train = x_a.slice(train_start,train_end)
+      // I should write x_oos to CSV:
+      var oos_csv_writer   = new PrintWriter(new File("/tmp/oos.csv"  ))
+      oos_csv_writer.write("hello\n")
+      oos_csv_writer.close
+      println(oos_i)})
 
 
 
