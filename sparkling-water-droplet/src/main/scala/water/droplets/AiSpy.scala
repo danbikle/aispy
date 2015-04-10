@@ -50,7 +50,8 @@ object AiSpy {
     val pctlead_i = 2
     val pctlag1_i = 3
     val p2_i      = 9
-    val x_a   = all_obs_a.map(_.split(",").slice(pctlag1_i, p2_i))
+    val x_s_a     = all_obs_a.map(_.split(",").slice(pctlag1_i,p2_i+1))
+    val x_a       = x_s_a.map(_.toInt)
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
