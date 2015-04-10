@@ -38,10 +38,10 @@ object AiSpy {
     import h2oContext._
 
     // I should get all observations out of CSV
-    val all_obs_s  = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
-    val all_obs_f  = scala.io.Source.fromFile(all_obs_s)
-    val all_obs    = all_obs_f.getLines
-    val all_obs_a  = all_obs.toArray
+    val all_obs_s = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
+    val all_obs_f = scala.io.Source.fromFile(all_obs_s)
+    val all_obs   = all_obs_f.getLines
+    val all_obs_a = all_obs.toArray
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
