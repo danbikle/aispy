@@ -69,18 +69,16 @@ object AiSpy {
       var dlParams = new DeepLearningParameters()
       dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
       dlParams._response_column = 'pctlead
-      dlParams._epochs          = 22
+      dlParams._epochs          = 9
       dlParams._activation      = Activation.RectifierWithDropout
       dlParams._hidden          = Array[Int](7,14)
       var dl                    = new DeepLearning(dlParams)
       var dlModel               = dl.trainModel.get
       // I should predict
-/*
       var dl_prediction_df = dlModel.score(oos_df)('predict)
       // I should prepare for reporting
       var dl_prediction_f  = dl_prediction_df.vec(0).at(0)
-      var utime_l          = oos_df('cdate).vec( 0).at(0).toLong
-*/
+      var utime_l          = oos_df('cdate).vec(  0).at(0).toLong
       println(oos_i)
 })
 
