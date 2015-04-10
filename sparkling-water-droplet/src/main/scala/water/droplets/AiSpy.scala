@@ -23,7 +23,7 @@ object AiSpy {
   def main(args: Array[String]) {
 
     // I should calculate this many predictions:
-    val pcount = 9
+    val pcount = 22
     // I should train from this many observations:
     val train_count = 252 * 20 // 20 years
 
@@ -45,7 +45,7 @@ object AiSpy {
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
-    val dofit         = 10
+    val dofit         = 4
     // I should have this number of days between training data and oos data:
     val train_oos_gap = dofit + 1// train_oos_gap should <= dofit
     // I should get DeepLearning ready:
