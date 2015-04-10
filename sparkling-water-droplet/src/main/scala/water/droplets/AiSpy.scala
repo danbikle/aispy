@@ -50,7 +50,8 @@ object AiSpy {
     val train_oos_gap = dofit + 1// train_oos_gap should <= dofit
     // I should get DeepLearning ready:
     var dlParams      = new DeepLearningParameters()
-
+    var dl            = new DeepLearning(dlParams)
+    var dlModel       = dl.trainModel.get
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
       var train_end   = train_start+train_count
@@ -78,13 +79,13 @@ object AiSpy {
         dlParams._epochs          = 2
         dlParams._activation      = Activation.RectifierWithDropout
         dlParams._hidden          = Array[Int](7,14)
-        var dl                    = new DeepLearning(dlParams)
-        var dlModel               = dl.trainModel.get}
+        dl                        = new DeepLearning(dlParams)
+        dlModel                   = dl.trainModel.get}
       // I should predict
       var dl_prediction_df = dlModel.score(oos_df)('predict)
       // I should prepare for reporting
-      var dl_prediction_f  = dl_prediction_df.vec(0).at(rnum)
-      var utime_l          = oos1_df('cdate).vec( 0).at(rnum).toLong
+      var dl_prediction_f  = dl_prediction_df.vec(0).at(0)
+      var utime_l          = oos_df('cdate).vec( 0).at(0).toLong
       println(oos_i)})
 
 /**
