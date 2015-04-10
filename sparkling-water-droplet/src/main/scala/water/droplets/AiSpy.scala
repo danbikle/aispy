@@ -79,10 +79,11 @@ object AiSpy {
       // I should write train-data to CSV:
       // var train_csv_writer = new PrintWriter(new File(trainf_s))
 train_csv_writer = new PrintWriter(new File(trainf_s))
-      // train_csv_writer.write(all_obs_a(0)    +"\n")
+      train_csv_writer.write(all_obs_a(0)    +"\n")
       // var train_a = all_obs_a.slice(train_start,train_end)
-      // train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
-      // train_csv_writer.close
+train_a = all_obs_a.slice(train_start,train_end)
+      train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
+      train_csv_writer.close
       // I should build DataFrames from CSV files:
       var oos_df   = new DataFrame(new File(oosf_s  ))
       if ((oos_i == 1) || (oos_i % dofit == 0)) {
