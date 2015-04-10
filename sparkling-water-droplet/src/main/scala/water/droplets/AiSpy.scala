@@ -73,7 +73,6 @@ object AiSpy {
       dlParams._epochs          = 2
       dlParams._activation      = Activation.RectifierWithDropout
       dlParams._hidden          = Array[Int](7,14)
-      var dl                    = new DeepLearning(dlParams)
       var dlModel               = dl.trainModel.get
       // I should predict
 /*
