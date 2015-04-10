@@ -64,10 +64,13 @@ object AiSpy {
       var train_end   = train_start+train_count
       var x_train = x_a.slice(train_start,train_end)
       // I should write oos-data to CSV:
-      var oos_csv_writer   = new PrintWriter(new File("/tmp/oos.csv"  ))
+      var oosf_s = "/tmp/oos.csv"
+      var oos_csv_writer   = new PrintWriter(new File(oosf_s))
       oos_csv_writer.write(all_obs_a(0)    +"\n")
       oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
+      // I should build a df from csv
+      var oos_df = new DataFrame(new File(oosf_s))
       println(oos_i)})
 
 
