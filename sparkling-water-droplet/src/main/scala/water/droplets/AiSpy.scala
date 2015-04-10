@@ -45,9 +45,11 @@ object AiSpy {
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
-    val dofit = 10
+    val dofit         = 10
     // I should have this number of days between training data and oos data:
     val train_oos_gap = dofit + 1// train_oos_gap should <= dofit
+    // I should get DeepLearning ready:
+    var dlParams      = new DeepLearningParameters()
 
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
@@ -67,28 +69,23 @@ object AiSpy {
       train_csv_writer.close
       // I should build DataFrames from CSV files:
       var oos_df   = new DataFrame(new File(oosf_s  ))
-      var train_df = new DataFrame(new File(trainf_s))
+      if ((oos_i == 1) || (oos_i % dofit == 0)) {
+        var train_df = new DataFrame(new File(trainf_s))
+        // I should train
+        // Build DeepLearning model
+        dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+        dlParams._response_column = 'pctlead
+        dlParams._epochs          = 2
+        dlParams._activation      = Activation.RectifierWithDropout
+        dlParams._hidden          = Array[Int](7,14)
+        var dl                    = new DeepLearning(dlParams)
+        var dlModel               = dl.trainModel.get
+
+}
 
       println(oos_i)})
 
-
-
-    // I should test if I can write them to a CSV
-
-
-    var obc = 0
-    all_obs.foreach(elm => {
-      var oos_csv_writer   = new PrintWriter(new File("/tmp/oos.csv"  ))
-      var train_csv_writer = new PrintWriter(new File("/tmp/train.csv"))
-      oos_csv_writer.write(elm+"\n")
-      oos_csv_writer.close
-      all_obs.foreach(elm => train_csv_writer.write(elm+"\n"))
-      train_csv_writer.close
-      obc +=1
-})
-
-
-
+/**
     val all_obs_df = new DataFrame(new File(all_obs_s))
     var predictions_array = new Array[String](pcount)
 
@@ -132,14 +129,14 @@ object AiSpy {
     val gbmModel               = gbm.trainModel.get
 
     // Build DeepLearning model
-    val dlParams              = new DeepLearningParameters()
-    dlParams._train           = train2_df
-    dlParams._response_column = 'pctlead
-    dlParams._epochs          = 20
-    dlParams._activation      = Activation.RectifierWithDropout
-    dlParams._hidden          = Array[Int](7,14)
-    val dl                    = new DeepLearning(dlParams)
-    val dlModel               = dl.trainModel.get
+    val dlParams2              = new DeepLearningParameters()
+    dlParams2._train           = train2_df
+    dlParams2._response_column = 'pctlead
+    dlParams2._epochs          = 20
+    dlParams2._activation      = Activation.RectifierWithDropout
+    dlParams2._hidden          = Array[Int](7,14)
+    val dl2                    = new DeepLearning(dlParams2)
+    val dlModel2               = dl2.trainModel.get
 
 
     val gbm_csv_writer = new PrintWriter(new File("/tmp/gbm_predictions.csv"))
@@ -147,7 +144,7 @@ object AiSpy {
 
     // Calculate predictions
     val gbm_predictions_df = gbmModel.score(oos2_df)('predict)
-    val dl_predictions_df  = dlModel.score( oos2_df)('predict)
+    val dl_predictions_df  = dlModel2.score( oos2_df)('predict)
     val numRows            = dl_predictions_df.numRows().toInt
     (0 to numRows-1).foreach(rnum => {
       var gbm_prediction_f = gbm_predictions_df.vec(0).at(rnum)
@@ -168,6 +165,7 @@ object AiSpy {
       println("oos row processed: "+rnum)})
     gbm_csv_writer.close
     dl_csv_writer.close
+**/
 
     // I should manually garbage collect
     "/home/ann/aispy/curl_remove_all.bash" ! scala.sys.process.ProcessLogger(ln => println(ln))
