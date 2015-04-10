@@ -24,6 +24,9 @@ object AiSpy {
 
     // I should calculate this many predictions:
     val pcount = 9
+    // I should train from this many observations:
+    val train_count = 252 * 20 // 20 years
+
     val mdt = new MutableDateTime()
 
     // Create Spark Context
@@ -37,11 +40,28 @@ object AiSpy {
     // I should get all observations out of CSV
     val all_obs_s  = "/home/ann/aispy/swd/data/ftr_ff_GSPC.csv"
     val all_obs_f = scala.io.Source.fromFile(all_obs_s)
-    val all_obs_a = all_obs_f.getLines()
+    val all_obs   = all_obs_f.getLines()
 
+    
+    // I should build a prediction loop from pcount.
+    // Higher dofit means fewer models means faster loop:
+    val dofit = 10
+    // I should have this number of days between training data and oos data:
+    val train_oos_gap = dofit // train_oos_gap should <= dofit
+
+    // I should test if I can write them to a CSV
     val my_csv_writer = new PrintWriter(new File("/tmp/my_obs.csv"))
+
+    (0 to pcount).foreach(oos_i => {
+      var train_start = oos_i+1+train_oos_gap
+      var train_end   = train_start + train_count
+      var obs_oos1_a   = all_obs.toArray
+      var obs_oos2_a   = obs_oos1_a(oos_i)
+
+      "hello" })
+
     var obc = 0
-    all_obs_a.foreach(elm => {
+    all_obs.foreach(elm => {
       if (obc == 1) println(elm)
       my_csv_writer.write(elm+"\n")
       obc +=1})
