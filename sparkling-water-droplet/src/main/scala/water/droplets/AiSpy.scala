@@ -23,7 +23,7 @@ object AiSpy {
   def main(args: Array[String]) {
 
     // I should calculate this many predictions:
-    val pcount = 22
+    val pcount = 252 * 2
     // I should train from this many observations:
     val train_count = 252 * 20 // 20 years
 
@@ -70,7 +70,7 @@ object AiSpy {
       var dlParams = new DeepLearningParameters()
       dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
       dlParams._response_column = 'pctlead
-      dlParams._epochs          = 9
+      dlParams._epochs          = 20
       dlParams._activation      = Activation.RectifierWithDropout
       dlParams._hidden          = Array[Int](7,14)
       var dl                    = new DeepLearning(dlParams)
@@ -89,17 +89,13 @@ object AiSpy {
       var cp_s    = oos_df('cp).vec(0).at(0)
       var pctlead_s          = oos_df('pctlead).vec(0).at(0)
       predictions_a(oos_i-1) = date_s+","+cp_s+","+dl_prediction_f+","+pctlead_s
-      println(oos_i)
-})
-
-    var pred_csv_writer = new PrintWriter(new File("/tmp/dl_pred.csv")
+      // I should manually garbage collect
+      "/home/ann/aispy/curl_remove_all.bash" ! scala.sys.process.ProcessLogger(ln => println(ln))
+      println(oos_i)})
+    var pred_csv_writer = new PrintWriter(new File("/tmp/dl_pred.csv"))
     pred_csv_writer.write("cdate,cp,prediction,actual\n")
     predictions_a.foreach(elm => pred_csv_writer.write(elm+"\n"))
     pred_csv_writer.close
-
-    // I should manually garbage collect
-    "/home/ann/aispy/curl_remove_all.bash" ! scala.sys.process.ProcessLogger(ln => println(ln))
-
     // Shutdown application
     sc.stop()
   }
