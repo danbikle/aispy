@@ -45,8 +45,8 @@ object AiSpy {
 
     // I should build a prediction loop from pcount.
     // I should have this number of days between training data and oos data:
-    val train_oos_gap     = 2
-    var predictions_array = new Array[String](pcount)
+    val train_oos_gap = 2
+    var predictions_a = new Array[String](pcount)
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
       var train_end   = train_start+train_count
@@ -87,92 +87,15 @@ object AiSpy {
       var dom     = f"${mdt.getDayOfMonth}%02d"
       var date_s  = yr+"-"+moy+"-"+dom
       var cp_s    = oos_df('cp).vec(0).at(0)
-      var pctlead_s              = oos_df('pctlead).vec(0).at(0)
-      predictions_array(oos_i-1) = date_s+","+cp_s+","+dl_prediction_f+","+pctlead_s
+      var pctlead_s          = oos_df('pctlead).vec(0).at(0)
+      predictions_a(oos_i-1) = date_s+","+cp_s+","+dl_prediction_f+","+pctlead_s
       println(oos_i)
 })
 
-/**
-    val all_obs_df = new DataFrame(new File(all_obs_s))
-    
-
-    // I should demo how to slice some columns and rows
-    var mycolnum = all_obs_df.numCols()
-    var hello    = all_obs_df.vec(0)
-
-    (0 to pcount-1).foreach(rnum => {
-      println("rnum is: "+rnum)
-      // I should get row from all_obs_df
-      var oos_df  = all_obs_df('cdate)
-      var utime_l = oos_df('cdate).vec(0).at(rnum).toLong
-      mdt.setMillis(utime_l)
-      // Date formating should be refactored from 4 lines to 1 line
-      var yr      = mdt.getYear.toString
-      var moy     = f"${mdt.getMonthOfYear}%02d"
-      var dom     = f"${mdt.getDayOfMonth}%02d"
-      var date_s  = yr+"-"+moy+"-"+dom
-      var cp_s    = all_obs_df('cp).vec(0).at(rnum)
-      var pctlead_s = all_obs_df('pctlead).vec(0).at(rnum)
-      predictions_array(rnum) = date_s+","+cp_s+","+pctlead_s+","
-      "endloop"
-})
-
-    // Register file to be available on all nodes
-    sc.addFile("data/ftr_ff_GSPC_train.csv")
-    sc.addFile("data/ftr_ff_GSPC_oos.csv"  )
-
-    // Load data and parse it via h2o parser
-    val train_df  = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_train.csv")))
-    val oos1_df   = new DataFrame(new File(SparkFiles.get("ftr_ff_GSPC_oos.csv"  )))
-    val train2_df = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
-    val oos2_df   =   oos1_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
-
-    // Build GBM model
-    val gbmParams              = new GBMParameters()
-    gbmParams._train           = train2_df
-    gbmParams._response_column = 'pctlead
-    gbmParams._ntrees          = 5
-    val gbm                    = new GBM(gbmParams)
-    val gbmModel               = gbm.trainModel.get
-
-    // Build DeepLearning model
-    val dlParams2              = new DeepLearningParameters()
-    dlParams2._train           = train2_df
-    dlParams2._response_column = 'pctlead
-    dlParams2._epochs          = 20
-    dlParams2._activation      = Activation.RectifierWithDropout
-    dlParams2._hidden          = Array[Int](7,14)
-    val dl2                    = new DeepLearning(dlParams2)
-    val dlModel2               = dl2.trainModel.get
-
-
-    val gbm_csv_writer = new PrintWriter(new File("/tmp/gbm_predictions.csv"))
-    val dl_csv_writer  = new PrintWriter(new File("/tmp/dl_predictions.csv" ))
-
-    // Calculate predictions
-    val gbm_predictions_df = gbmModel.score(oos2_df)('predict)
-    val dl_predictions_df  = dlModel2.score( oos2_df)('predict)
-    val numRows            = dl_predictions_df.numRows().toInt
-    (0 to numRows-1).foreach(rnum => {
-      var gbm_prediction_f = gbm_predictions_df.vec(0).at(rnum)
-      var dl_prediction_f  = dl_predictions_df.vec( 0).at(rnum)
-      var utime_l          = oos1_df('cdate).vec(   0).at(rnum).toLong
-      mdt.setMillis(utime_l)
-      // Date formating should be refactored from 4 lines to 1 line
-      var yr               = mdt.getYear.toString
-      var moy              = f"${mdt.getMonthOfYear}%02d"
-      var dom              = f"${mdt.getDayOfMonth}%02d"
-      var date_s           = yr+"-"+moy+"-"+dom
-      var cp_f             = oos1_df('cp).vec(     0).at(rnum)
-      var actual_f         = oos1_df('pctlead).vec(0).at(rnum)
-      var gbm_csv_s = date_s+","+cp_f+","+gbm_prediction_f+","+actual_f+"\n"
-      var dl_csv_s  = date_s+","+cp_f+","+dl_prediction_f+ ","+actual_f+"\n"
-      gbm_csv_writer.write(gbm_csv_s)
-      dl_csv_writer.write(  dl_csv_s)
-      println("oos row processed: "+rnum)})
-    gbm_csv_writer.close
-    dl_csv_writer.close
-**/
+    var pred_csv_writer = new PrintWriter(new File("/tmp/dl_pred.csv")
+    pred_csv_writer.write("cdate,cp,prediction,actual\n")
+    predictions_a.foreach(elm => pred_csv_writer.write(elm+"\n"))
+    pred_csv_writer.close
 
     // I should manually garbage collect
     "/home/ann/aispy/curl_remove_all.bash" ! scala.sys.process.ProcessLogger(ln => println(ln))
