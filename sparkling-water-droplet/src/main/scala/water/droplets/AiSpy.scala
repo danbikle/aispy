@@ -85,7 +85,7 @@ object AiSpy {
       var moy     = f"${mdt.getMonthOfYear}%02d"
       var dom     = f"${mdt.getDayOfMonth}%02d"
       var date_s  = yr+"-"+moy+"-"+dom
-
+      var cp_s    = oos_df('cp).vec(0).at(0)
       println(oos_i)
 })
 
