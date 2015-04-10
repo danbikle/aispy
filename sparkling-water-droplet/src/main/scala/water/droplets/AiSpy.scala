@@ -51,6 +51,21 @@ object AiSpy {
     // I should get DeepLearning ready:
     var dlParams      = new DeepLearningParameters()
     var dl            = new DeepLearning(dlParams)
+
+        var trainf_s         = "/tmp/train.csv"
+        var train_csv_writer = new PrintWriter(new File(trainf_s))
+        train_csv_writer.write(all_obs_a(0)    +"\n")
+        var train_a = all_obs_a.slice(1,100)
+        train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
+        train_csv_writer.close
+        var train_df = new DataFrame(new File(trainf_s))
+        dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
+        dlParams._response_column = 'pctlead
+        dlParams._epochs          = 2
+        dlParams._activation      = Activation.RectifierWithDropout
+        dlParams._hidden          = Array[Int](7,14)
+        dl                        = new DeepLearning(dlParams)
+
     var dlModel       = dl.trainModel.get
     (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
@@ -62,16 +77,16 @@ object AiSpy {
       oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
       // I should write train-data to CSV:
-      var trainf_s         = "/tmp/train.csv"
-      var train_csv_writer = new PrintWriter(new File(trainf_s))
-      train_csv_writer.write(all_obs_a(0)    +"\n")
-      var train_a = all_obs_a.slice(train_start,train_end)
-      train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
-      train_csv_writer.close
+      // var trainf_s         = "/tmp/train.csv"
+      // var train_csv_writer = new PrintWriter(new File(trainf_s))
+      // train_csv_writer.write(all_obs_a(0)    +"\n")
+      // var train_a = all_obs_a.slice(train_start,train_end)
+      // train_a.foreach(elm => train_csv_writer.write(elm+"\n"))
+      // train_csv_writer.close
       // I should build DataFrames from CSV files:
       var oos_df   = new DataFrame(new File(oosf_s  ))
       if ((oos_i == 1) || (oos_i % dofit == 0)) {
-        var train_df = new DataFrame(new File(trainf_s))
+        // var train_df = new DataFrame(new File(trainf_s))
         // I should train
         // Build DeepLearning model
         dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
@@ -82,10 +97,12 @@ object AiSpy {
         dl                        = new DeepLearning(dlParams)
         dlModel                   = dl.trainModel.get}
       // I should predict
+/*
       var dl_prediction_df = dlModel.score(oos_df)('predict)
       // I should prepare for reporting
       var dl_prediction_f  = dl_prediction_df.vec(0).at(0)
       var utime_l          = oos_df('cdate).vec( 0).at(0).toLong
+*/
       println(oos_i)})
 
 /**
