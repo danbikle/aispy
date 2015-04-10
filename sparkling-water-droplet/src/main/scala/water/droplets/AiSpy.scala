@@ -80,6 +80,8 @@ object AiSpy {
         dlParams._hidden          = Array[Int](7,14)
         var dl                    = new DeepLearning(dlParams)
         var dlModel               = dl.trainModel.get
+    // I should predict
+    var dl_prediction_df = dlModel.predict(oos_df)('predict)
 
 }
 
