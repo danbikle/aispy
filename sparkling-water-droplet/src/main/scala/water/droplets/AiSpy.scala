@@ -79,12 +79,12 @@ object AiSpy {
         dlParams._activation      = Activation.RectifierWithDropout
         dlParams._hidden          = Array[Int](7,14)
         var dl                    = new DeepLearning(dlParams)
-        var dlModel               = dl.trainModel.get
-    // I should predict
-    var dl_prediction_df = dlModel.predict(oos_df)('predict)
-
-}
-
+        var dlModel               = dl.trainModel.get}
+      // I should predict
+      var dl_prediction_df = dlModel.score(oos_df)('predict)
+      // I should prepare for reporting
+      var dl_prediction_f  = dl_prediction_df.vec(0).at(rnum)
+      var utime_l          = oos1_df('cdate).vec( 0).at(rnum).toLong
       println(oos_i)})
 
 /**
