@@ -67,12 +67,12 @@ object AiSpy {
       var train_df = new DataFrame(new File(trainf_s))
       // I should train
       var dlParams = new DeepLearningParameters()
-      var dl       = new DeepLearning(dlParams)
       dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
       dlParams._response_column = 'pctlead
-      dlParams._epochs          = 2
+      dlParams._epochs          = 22
       dlParams._activation      = Activation.RectifierWithDropout
       dlParams._hidden          = Array[Int](7,14)
+      var dl                    = new DeepLearning(dlParams)
       var dlModel               = dl.trainModel.get
       // I should predict
 /*
