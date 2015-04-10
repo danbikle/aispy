@@ -50,7 +50,7 @@ object AiSpy {
     val pctlead_i = 2
     val pctlag1_i = 3
     val p2_i      = 9
-    val all_x_a   = all_obs_a
+    val x_a   = all_obs_a.map(_.split(",").slice(pctlag1_i, p2_i))
 
     // I should build a prediction loop from pcount.
     // Higher dofit means fewer models means faster loop:
@@ -59,7 +59,7 @@ object AiSpy {
     val train_oos_gap = dofit // train_oos_gap should <= dofit
 
     (1 to pcount).foreach(oos_i =>{
-      var obs_oos = all_obs_a(oos_i)
+      var x_oos = x_a(oos_i)
       println(oos_i)
 "endloop"})
 
