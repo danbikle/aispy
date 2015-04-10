@@ -88,15 +88,10 @@ train_a = all_obs_a.slice(train_start,train_end)
       var oos_df   = new DataFrame(new File(oosf_s  ))
       if ((oos_i == 1) || (oos_i % dofit == 0)) {
         // var train_df = new DataFrame(new File(trainf_s))
+train_df = new DataFrame(new File(trainf_s))
         // I should train
-        // Build DeepLearning model
-        dlParams._train           = train_df('pctlead,'pctlag1,'pctlag2,'pctlag4,'pctlag8,'ip,'presult,'p2)
-        dlParams._response_column = 'pctlead
-        dlParams._epochs          = 2
-        dlParams._activation      = Activation.RectifierWithDropout
-        dlParams._hidden          = Array[Int](7,14)
-        dl                        = new DeepLearning(dlParams)
-        dlModel                   = dl.trainModel.get}
+        dl              = new DeepLearning(dlParams)
+        dlModel         = dl.trainModel.get}
       // I should predict
 /*
       var dl_prediction_df = dlModel.score(oos_df)('predict)
