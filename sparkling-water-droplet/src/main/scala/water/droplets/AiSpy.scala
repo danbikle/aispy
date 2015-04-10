@@ -42,7 +42,6 @@ object AiSpy {
     val all_obs_f  = scala.io.Source.fromFile(all_obs_s)
     val all_obs    = all_obs_f.getLines
     val all_obs_a  = all_obs.toArray
-    val all_obs2_a = all_obs_a.slice(1,4)
     // I should declare integers for navigating my arrays:
     // cdate,cp,pctlead,pctlag1,pctlag2,pctlag4,pctlag8,ip,presult,p2
     val cdate_i   = 0
@@ -60,14 +59,14 @@ object AiSpy {
     // I should have this number of days between training data and oos data:
     val train_oos_gap = dofit + 1// train_oos_gap should <= dofit
 
-    (0 to pcount-1).foreach(oos_i =>{
-      var x_oos       = x_a(oos_i)
+    (1 to pcount).foreach(oos_i =>{
       var train_start = oos_i+train_oos_gap
       var train_end   = train_start+train_count
       var x_train = x_a.slice(train_start,train_end)
-      // I should write x_oos to CSV:
+      // I should write oos-data to CSV:
       var oos_csv_writer   = new PrintWriter(new File("/tmp/oos.csv"  ))
-      oos_csv_writer.write("hello\n")
+      oos_csv_writer.write(all_obs_a(0)    +"\n")
+      oos_csv_writer.write(all_obs_a(oos_i)+"\n")
       oos_csv_writer.close
       println(oos_i)})
 
