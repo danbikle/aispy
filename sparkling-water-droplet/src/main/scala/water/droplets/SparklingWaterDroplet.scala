@@ -45,18 +45,6 @@ object SparklingWaterDroplet {
 
     // Load data and parse it via h2o parser
     val irisTable = new DataFrame(new File(SparkFiles.get("iris.csv")))
-    // Demo deepSlice()
-    // null,null gives me all rows, all columns:
-    val dcdf1   = irisTable.deepSlice(null,null)
-    // deepSlice can take long[] for both args
-    var long1_a = Array[Long](0,1,2,3,4)
-    var long2_a = 0 until 4 toArray
-    var long3_a = long2_a.map(elm => elm.longValue)
-    var mylong  = 3.longValue
-    val dcdf2   = irisTable.deepSlice(long3_a,null)
-    val rows_a  = Array[Long](0,3,12,33,51)
-    val cols_a  = Array[Long](0,2,4)
-    val dcdf3   = irisTable.deepSlice(rows_a,cols_a)
 
     // Build GBM model
     val gbmParams = new GBMParameters()

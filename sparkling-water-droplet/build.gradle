@@ -4,6 +4,9 @@
  * For more details please follow README.md.
  */
 
+apply plugin: 'application'
+mainClassName = 'water.droplets.AiSpy'
+
 // Apply the java plugin to add support for Java
 apply plugin: 'scala'
 // Support idea and Eclipse IDEs
