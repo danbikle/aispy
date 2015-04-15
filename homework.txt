@@ -32,6 +32,10 @@ Do I need git to get software from github?
 
 What is H2O software?
 
+How is H2O software organized?
+
+How does H2O software on github compare to H2O downloads?
+
 What is Open JDK?
 
 What is JDK 7?
@@ -94,6 +98,10 @@ To run H2O Sparkling Water, do I need to install Spark?
 
 To run H2O Sparkling Water Droplet, do I need to install Spark?
 
+To run AiSpy, do I need to install Scala?
+
+To run AiSpy, do I need to install H2O?
+
 How do I run AiSpy from IntelliJ?
 
 How do I run AiSpy from shell prompt?
@@ -103,3 +111,33 @@ What is cron?
 How do I run AiSpy from cron?
 
 Can I run AiSpy from Ubuntu on cloud?
+
+Which Scala datatypes does AiSpy use?
+
+Which Scala control structures does AiSpy use?
+
+Where is the data which AiSpy learns from?
+
+Where does AiSpy store its predictions?
+
+How do I visualize AiSpy predictions?
+
+Which ML algorithm does AiSpy use?
+
+How do I control this algorithm?
+
+How do I visualize this algorithm?
+
+How many models does AiSpy create?
+
+How do I control the number of predictions from AiSpy?
+
+How do I control what AiSpy learns from?
+
+Which objects in AiSpy are generic Scala?
+
+Which objects in AiSpy are built from H2O code?
+
+Can I detect any naming conventions of AiSpy variables?
+
+
