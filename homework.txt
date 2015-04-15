@@ -1,0 +1,105 @@
+/home/ann/aispy/homework.txt
+
+What problem does this software, AiSpy, attempt to solve?
+
+Does AiSpy run on Windows?
+
+Does AiSpy run on Mac?
+
+How do I install Linux Ubuntu 14.04.2 on my laptop?
+
+What is an ISO file?
+
+If I see 'amd64' in a filename, what does that mean?
+
+After I install Ubuntu, how to login as root?
+
+What is apt-get?
+
+What is gitk?
+
+What is wget?
+
+On Ubuntu, how to create a user named ann?
+
+Why should I run AiSpy in the ann account?
+
+How do I set the password of the ann account?
+
+What does git clone do?
+
+Do I need git to get software from github?
+
+What is H2O software?
+
+What is Open JDK?
+
+What is JDK 7?
+
+What is JDK 8?
+
+What is java version 1.8.x?
+
+What is java version 1.7.x?
+
+What is Java SE?
+
+What is JRE?
+
+Does H2O work with Open JDK?
+
+Does H2O work with JDK 8?
+
+Does H2O work with JDK 7?
+
+How do I download JDK 7?
+
+What can go wrong during download?
+
+What does it look like after I download it?
+
+How do I install it after I download it?
+
+How does 32bit Java compare to 64bit Java?
+
+How do I avoid 32bit Java?
+
+What is javac?
+
+What is JAVA_HOME?
+
+What is IntelliJ?
+
+Do I need IntelliJ to run AiSpy?
+
+How do I install IntelliJ?
+
+How do I install the IntelliJ-scala-plugin?
+
+In IntelliJ, what is a project?
+
+In IntelliJ, what is a project-JDK?
+
+In IntelliJ, what is a remote repository?
+
+How do I start IntelliJ?
+
+What is Spark?
+
+What is H2O Sparkling Water?
+
+What is H2O Sparkling Water Droplet?
+
+To run H2O Sparkling Water, do I need to install Spark?
+
+To run H2O Sparkling Water Droplet, do I need to install Spark?
+
+How do I run AiSpy from IntelliJ?
+
+How do I run AiSpy from shell prompt?
+
+What is cron?
+
+How do I run AiSpy from cron?
+
+Can I run AiSpy from Ubuntu on cloud?
