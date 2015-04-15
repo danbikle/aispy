@@ -4,8 +4,9 @@ The files in this repo are part of an effort to use h2o to predict s&p500.
 
 Installation:
 
-- Install Linux Ubuntu 14 on your laptop or desktop.
+- Install Linux Ubuntu 14.04.2 on your laptop or desktop.
   This demo cannot run in the cloud.
+  http://releases.ubuntu.com/14.04/ubuntu-14.04.2-desktop-amd64.iso
 
 - Login as root
 
@@ -67,7 +68,7 @@ http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.tar.gz
 
 - During idea startup, install scala plugin
 
-- I shold click the open icon if it is presented
+- I should click the open icon if it is presented
 
 - With IntelliJ, open this file: ~ann/aispy/swd/build.gradle
 
