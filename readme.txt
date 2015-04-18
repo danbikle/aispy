@@ -68,11 +68,20 @@ http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.tar.gz
 
 - During idea startup, install scala plugin
 
-- I should click the open icon if it is presented
+- Wait for the open project window.
 
-- With IntelliJ, open this file: ~ann/aispy/swd/build.gradle
+- Open project via this file: ~ann/aispy/swd/build.gradle
 
 - I should 'click-through' the forms
+
+- Pay close attention to the busy-indicator at the bottom.
+
+- Pay close attention to the IntelliJ-start-shell
+
+- Do nothing if IntelliJ is busy.
+
+- I should open this file: 
+  ~/aispy/sparkling-water-droplet/src/main/scala/water/droplets/SparklingWaterDroplet.scala
 
 - I should 'define' Project JDK (which is /home/ann/jdk)
 
