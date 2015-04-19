@@ -91,4 +91,6 @@ http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.tar.gz
 
 - It should start H2O and calculate some predictions
 
+- I placed some screen dumps here:
 
+- http://aispy.meteor.com/
